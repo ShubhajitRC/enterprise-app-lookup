@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: Enterprise Application Lookup
+  description: Enterprise Application Lookup
+  version: 1.0.0
+servers:
+  - url: 'https'
+tags:
+  - name: enterprise-applications
+    description: Enterprise Applications
+
+paths:
+  /v1/applications:
+    get:
+      summary: Get all the Enterprise Application details
+      description: Get all the Enterprise Application details
+      operationId: getEnterpriseApplications
+      tags:
+        - enterprise-applications
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to be retured
+          required: false
+          schema:
+            type: integer
+            example: 999
+        - name: offset
+          in: query
+          description: Specify the ranking number of the elements
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of Enterprise Applications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnterpriseApplications"
+        '5XX':
+          description: Internal server error
+    post:
+      summary: Create new record for Enterprise Application
+      description: Create new record for Enterprise Application
+      operationId: createEnterpriseApplication
+      tags:
+        - enterprise-applications
+      requestBody:
+        description: Enterprise Application
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseApplication'
+      responses:
+        '201':
+          description: Application Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnterpriseApplication"
+        '400':
+          description: Invalid Input
+        '5XX':
+          description: Internal server error
+  /v1/applications/{applicationId}:
+    get:
+      summary: Get Enterprise Application by Id
+      description: Get Enterprise Application by Id
+      operationId: getEnterpriseApplicationsById
+      tags:
+        - enterprise-applications
+      parameters:
+        - name: applicationId
+          in: path
+          description: Application Id
+          required: true
+          schema:
+            type: string
+            example: "AP001"
+      responses:
+        '200':
+          description: Successful Opraration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnterpriseApplication"
+        '400':
+          description: Invalid input
+        '5XX':
+          description: Internal server error
+    delete:
+      summary: Delete entry for Enterprise Application
+      description: Delete entry for Enterprise Application
+      operationId: deleteEnterpriseApplicationById
+      tags:
+        - enterprise-applications
+      parameters:
+        - name: applicationId
+          in: path
+          description: Application Id
+          required: true
+          schema:
+            type: string
+            example: "AP001"
+      responses:
+        '200':
+          description: Successful Opraration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationStatus"
+        '400':
+          description: Invalid input
+        '5XX':
+          description: Internal server error
+  /v1/healthCheck/{applicationId}:
+    get:
+      summary: Enterprise Applications health check
+      description: Enterprise Applications health check
+      operationId: getHealthCheck
+      tags:
+        - enterprise-applications
+      parameters:
+        - name: applicationId
+          in: path
+          description: Application Id
+          required: true
+          schema:
+            type: string
+            example: "AP001"
+      responses:
+        '200':
+          description: Enterprise Applications Health Status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationStatus"
+        '5XX':
+          description: Internal server error
+components:
+  schemas:
+    EnterpriseApplication:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          example: "APPXX"
+        applicationName:
+          type: string
+          example: "SG_XX"
+        applicationUrl:
+          type: string
+          example: "http://localhost:8080"
+        applicationAuthenticationType:
+          type: string
+          example: "OAuth2.0"
+        upStreamApplication:
+          type: string
+          example: "SG_XX"
+        downStreamApplication:
+          type: string
+          example: "SG_XX"
+    EnterpriseApplications:
+      type: array
+      items:
+        $ref: "#/components/schemas/EnterpriseApplication"
+    ApplicationStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "UP"
