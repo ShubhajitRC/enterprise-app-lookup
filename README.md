@@ -37,6 +37,10 @@ mvnw clean package
 mvnw spring-boot:run
 ```
 
+```
+http://localhost:8082/swagger-ui/index.html
+```
+
 ## Consuming System APIs
 
 > **Problem Statement**<br>
